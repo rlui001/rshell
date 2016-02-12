@@ -13,11 +13,23 @@ using namespace std;
 
 int main()
 {
+	system("clear");
 	cout << "Rshell initialized...\n";
-	string userInput;
+	string username = getlogin();
+	char hostname[128] = "";
+	gethostname(hostname, sizeof(hostname));
 	
-	
-	
+	cout << "[" << username << "@" << hostname << "]" << "$ ";
+
+	string userinput;
+	getline(cin, userinput);	//Temporary method
+
+	while (userinput != "exit") //Temporary method
+	{
+		cout << "[" << username << "@" << hostname << "]" << "$ ";
+		getline(cin, userinput);
+	}
+
 
 
 
