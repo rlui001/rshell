@@ -69,3 +69,19 @@ hello
 echo "Exiting..."
 exit
 EOF
+echo ""
+echo "============================================================="
+echo "Testing command with many arguments:(Press enter to continue): "
+read answer
+
+./a.out << EOF
+ls -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a 
+ls -a -a -a 
+ls -a -a 
+ls -a
+echo "Testing 'ls' with comment: "
+ls # --version
+echo "If the version did not display, comment worked."
+exit
+EOF
+
