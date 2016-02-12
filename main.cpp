@@ -16,7 +16,7 @@ int main()
 	cout << "Rshell initialized...\n\n";
 
 	// Grabs username.
-	char* username = getlogin();
+	char *username = getlogin();
 	if (getlogin() == NULL)
 	{
 		perror("getlogin() failed");
@@ -54,7 +54,7 @@ int main()
 		char *str1 = new char[userinput.size() + 1];
 		strcpy(str1, userinput.c_str());
 		token = strtok_r(str1, delim, &saveptr1);
-
+		
 		// Iterates through every seperate command in a cmd line.
 		while (token != NULL)
 		{
