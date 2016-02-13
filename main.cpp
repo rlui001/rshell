@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -13,6 +14,7 @@ using namespace std;
 
 int main()
 {
+<<<<<<< HEAD
 
 	cout << "Rshell initialized...\n\n";
 
@@ -241,5 +243,5 @@ int main()
   }
 
 	return 0;
-}
+
 
