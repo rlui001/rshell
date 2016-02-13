@@ -26,16 +26,16 @@ read answer
 
 ./a.out << EOF
 echo "semi->semi"; echo "OK"; echo "OK"
-echo "or->or"; lss || echo "OK"; lss || echo "OK";
-echo "!or->!or" || echo "ERR: OR failed" || echo "ERR: Did not terminate."
+echo "or->or"; echo "OK" || echo "ERR: OR failed" || echo "ERR"
+echo "!or->!or"; lss || lss || echo "OK"
 echo "and->and" && echo "OK" && echo "OK"
-echo "and->!and" && echo "OK"; lss && : echo "ERR: AND failed"
+echo "and->!and"; echo "OK" && lss && echo "ERR"
 echo "semi->!or"; echo "OK" || echo "ERR: OR failed"
 echo "semi->or"; echo "OK"; lss || echo "OK"
 echo "semi->and"; echo "OK" && echo "OK"
 echo "semi->!and"; echo "OK"; lss && echo "ERR: AND failed"
-echo "!or->semi" || echo "ERR: OR failed"; echo "ERR: Did not terminate."
-echo "!and->semi"; lss && echo "ERR: And failed"; echo "ERR: Did not terminate."
+echo "!or->semi" || echo "ERR: OR failed"; echo "OK"
+echo "!and->semi"; lss && echo "ERR: And failed"; echo "OK"
 exit
 EOF
 
@@ -44,7 +44,7 @@ read answer
 
 ./a.out << EOF
 echo "TEST INC"; echo "OK" && echo "OK"; lss || echo "OK" && echo "OK"; echo "DONE"
-echo "TEST2 INC" && echo "OK"; lss || echo "OK" || echo "OR ERR"; echo "TERM ERR"
+echo "TEST2 INC" && echo "OK"; lss || echo "OK" || echo "OR ERR"; echo "OK"
 exit
 EOF
 
