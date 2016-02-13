@@ -14,7 +14,6 @@ using namespace std;
 
 int main()
 {
-<<<<<<< HEAD
 
 	cout << "Rshell initialized...\n\n";
 
