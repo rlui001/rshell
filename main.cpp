@@ -13,6 +13,7 @@ using namespace std;
 
 int main()
 {
+    bool currState = false;
 	cout << "Rshell initialized...\n\n";
 
 	// Grabs username.
@@ -118,7 +119,11 @@ int main()
 	}
 		argv[args.size()] = '\0';
 		concount = concount + counter;
-
+        
+        cout << "SIZE OF VECTOR: " << split.size() << endl;
+        for (int i = 0; i < split.size(); ++i) {
+            cout << split.at(i) << endl;
+        }
 
 
 		// Execution of command line using fork calls.
@@ -132,32 +137,64 @@ int main()
 	}
 		else if (pid == 0)
 		{   
-
-
+        
+        currState = true;
 		    if (execvp(*argv, argv) == -1)
 		    {
 		        perror("execvp failed");
-		        exit(1);
+		        currState = false;
 	      }
-	      else {
-	      
-	      }
+
+	    }
+		    else
+		    {
+		        if (wait(&status) == -1)
+		        {
+		            perror("waited too long");
+	          } 
+
+            cout << counter << " is the counter #" << endl;
+            cout << concount << " is the actual itr #" << endl;
+            token = strtok_r(NULL, delim, &saveptr1);
+
+        //FIXME
+
+       //     if (currState = true && split.at(concount) == 1) {     // command succeeds, && connector
+       //         cout << "a";
+		   //         token = strtok_r(NULL, delim, &saveptr1);
+		   //     }
+		   //     else if (currState = true && split.at(concount) == 2) {  // command succeeds, || connector
+       //         token = strtok_r(NULL, delim, &saveptr1);
+       //         cout << "b";
+             //   token = strtok_r(NULL, delim, &saveptr1);   // skip command and go to next
+       //     }
+       //     else if (currState = true && split.at(concount) == 3) { // command succeeds, ; connector
+       //        cout << "c";
+       //        token = strtok_r(NULL, delim, &saveptr1);
+       //     }
+       //     else if (currState = false && split.at(concount) == 1) {    // command fails, && connector
+       //        cout << "d";
+       //        token = strtok_r(NULL, delim, &saveptr1);
+              //  token = strtok_r(NULL, delim, &saveptr1);
+       //     }
+       //     else if (currState = false && split.at(concount) == 2) { // command fails, || connector
+       //         cout << "e";
+       //         token = strtok_r(NULL, delim, &saveptr1);
+       //     }
+       //     else if (currState = false && split.at(concount) == 3) { // command fails, ; connector
+       //         cout << "f";
+       //         token = strtok_r(NULL, delim, &saveptr1);
+       //     }
+       //     else if (split.at(concount) == -1) {
+       //     }
+       //    else {
+       //         token = strtok_r(NULL, delim, &saveptr1);
+       //     }
+            ++concount;
+        }
+
 
 	  }
-		else
-		{
-		if (wait(&status) == -1)
-		{
-		perror("waited too long");
-	}
-
-    cout << counter << " is the counter #" << endl;
-    cout << concount << " is the actual itr #" << endl;
-    ++concount;
-		token = strtok_r(NULL, delim, &saveptr1);
-	}
-
-	}
 
 
 	  if (userinput == "exit")	//Temporary
