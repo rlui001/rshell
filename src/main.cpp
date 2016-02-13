@@ -33,6 +33,7 @@ int main()
 
 	while (1)
 	{
+
 	  // Command prompt. '~' to distinguish from SSH bash.
 	  cout << "~[" << username << "@" << hostname << "]" << "$ ";
 
