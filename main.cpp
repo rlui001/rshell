@@ -13,7 +13,7 @@ using namespace std;
 
 int main()
 {
-    bool currState = false;
+
 	cout << "Rshell initialized...\n\n";
 
 	// Grabs username.
@@ -66,6 +66,7 @@ int main()
             split.push_back(1);
             contoken = strtok_r(NULL, lim, &savetok);
         }
+
         else if (strcmp(contoken, "||") == 0) {
             split.push_back(2);
             contoken = strtok_r(NULL, lim, &savetok);
@@ -82,9 +83,7 @@ int main()
 
     split.push_back(-1); // -1 indicates end of line
 
-    for (int i = 0; i < split.size(); ++i) {
-        cout << split.at(i) << ' ';
-    }
+
 
 	  char delim[] = ";|&";
 	  char *token, *subtoken;
@@ -97,6 +96,7 @@ int main()
 	  // Iterates through every seperate command in a cmd line.
 	  while (token != NULL)
 	  {
+	  bool currState = true;
 		char space[] = " ";
 		subtoken = strtok_r(token, space, &saveptr2);
 
@@ -106,7 +106,7 @@ int main()
 		{
 
 		args.push_back(subtoken);
-		cout << "Subtoken: " << subtoken << endl;
+		//cout << "Subtoken: " << subtoken << endl;
 		subtoken = strtok_r(NULL, space, &saveptr2);
 	}
 
@@ -120,10 +120,7 @@ int main()
 		argv[args.size()] = '\0';
 		concount = concount + counter;
         
-        cout << "SIZE OF VECTOR: " << split.size() << endl;
-        for (int i = 0; i < split.size(); ++i) {
-            cout << split.at(i) << endl;
-        }
+
 
 
 		// Execution of command line using fork calls.
@@ -138,12 +135,33 @@ int main()
 		else if (pid == 0)
 		{   
         
-        currState = true;
+       // currState = true;
 		    if (execvp(*argv, argv) == -1)
 		    {
-		        perror("execvp failed");
-		        currState = false;
+		       
+           if (split.at(concount) == 1) { // skip command and go to next. && not satisfied
+               while (split.at(concount) == 0) {
+                   ++concount;
+               }
+               perror("execvp failed");
+               goto label;
+               exit(1);
+           }
+           if (split.at(concount) == 2) { // || connector conditions satisfied, goes to next command
+
+		       perror("execvp failed");
+		       goto label2;
+		        exit(1);
+		       }
+		       if (split.at(concount) == 3) { // ;  connector, always goes to next command
+		           perror("execvp failed");
+		           goto label2;
+		           exit(1);
+		       }
 	      }
+
+        
+        
 
 	    }
 		    else
@@ -152,9 +170,29 @@ int main()
 		        {
 		            perror("waited too long");
 	          } 
+            
+            if (split.at(concount) == 2){                   // || not satisfied, skips command
+                while (split.at(concount) == 0) {
+                    ++concount;
+                    }
+                    goto label;
+            }
 
-            cout << counter << " is the counter #" << endl;
-            cout << concount << " is the actual itr #" << endl;
+            if (split.at(concount) == 1) {              // && satisfied, doesn't skip command
+                goto label2;
+            }
+
+            if (split.at(concount) == 3) {              // never skips command 
+                goto label2;
+            }
+
+            goto label2;
+
+
+            label:                                          // skips a command, goes to next
+            token = strtok_r(NULL, delim, &saveptr1);
+
+            label2:
             token = strtok_r(NULL, delim, &saveptr1);
 
         //FIXME
@@ -196,8 +234,9 @@ int main()
 
 	  }
 
-
+    
 	  if (userinput == "exit")	//Temporary
+
 		  break;
   }
 
