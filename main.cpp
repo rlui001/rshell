@@ -83,29 +83,31 @@ int main()
             {
                 if (strcmp(subtoken, "&&") == 0) {
                     split.push_back(1);
-                    cout << "1" << endl;
+                    args.push_back(" ");
+                    //cout << "1" << endl;
                     subtoken = strtok_r(NULL, space, &saveptr2);
                 }
                 else if (strcmp(subtoken, "||") == 0) {
                     split.push_back(2);
-                    cout << "2" << endl;
+                    args.push_back(" ");
+                    //cout << "2" << endl;
                     subtoken = strtok_r(NULL, space, &saveptr2);
                 }
                 else if (strcmp(subtoken, ";") == 0) {
                     split.push_back(3);
-                    cout << "3" << endl;
+                    args.push_back(" ");
                     subtoken = strtok_r(NULL, space, &saveptr2);
                 }
                 else {
                     split.push_back(0);
                     args.push_back(subtoken);
-                    cout << "Subtoken: " << "0" <<  subtoken << endl;
+                    cout << "Subtoken: "  <<  subtoken << endl;
                     subtoken = strtok_r(NULL, space, &saveptr2);
                 }
             }
 
             for (int i = 0; i < args.size(); ++i) {
-                cout << args[i] << ' ' << split[i] << endl;
+                cout << args.at(i) << ' ' << split.at(i) << endl;
             }
 
             char **argv = new char*[args.size() + 1];
