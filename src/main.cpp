@@ -110,6 +110,28 @@ int main()
 	    char **argv = new char*[args.size() + 1];
 	    for (unsigned int i = 0; i < args.size(); ++i)
 	    {
+                if (args.at(i) == "exit")
+                {
+                    exit(1);
+                }
+               if (split.at(concount) == 2)
+		    {   
+		    
+		        // || not satisfied, skips command
+		        while (split.at(concount) == 0) 
+		        {
+			    ++concount;
+                        }
+                        strtok_r(NULL, delim, &saveptr1);
+		    }	
+
+		    else if (split.at(concount) == 1) 
+	    	    {   
+		        // && satisfied, doesn't skip command
+		        strtok_r(NULL, delim, &saveptr1);
+		    }
+
+
 		counter = args.size(); 
 		argv[i] = new char[args.at(i).size() + 1];
 		strcpy(argv[i], args.at(i).c_str());	
@@ -139,14 +161,13 @@ int main()
                         if (stat(argv[2], &sb) == -1)
                         {
                             perror("stat");
-                            cout << "(False)\n";
-                            goto label2;
-                            exit(1);
+		            cout << "(False)\n";
+                            goto fail_condition;
                         }
+
                         else
                         {
                             cout << "(True)\n";
-                            goto label2;
                             exit(1);
                         }
 		    }
@@ -157,17 +178,20 @@ int main()
 		        {
 		            perror("stat");
 		            cout << "(False)\n";
-		            goto label2;
-		            exit(1);
-		        }
+                            goto fail_condition;
+                        }
+
 		        else
 		        {
                             switch (sb.st_mode & S_IFMT)
                             {
-                                case S_IFREG:   cout << "(True)\n";     break;
-                                default:        cout << "(False)\n";    break;
+                                case S_IFREG:   
+                                    cout << "(True)\n";     
+                                    break;
+                                default:        
+                                    cout << "(False)\n";    
+                                    goto fail_condition;
                             }
-                            goto label2;
                             exit(1);
 		        }
 		    }
@@ -178,17 +202,20 @@ int main()
 		        {
 		            perror("stat");
 		            cout << "(False)\n";
-		            goto label2;
-		            exit(1);
-		        }
+                            goto fail_condition;
+                        }
+
 		        else
 		        {
 		            switch (sb.st_mode & S_IFMT)
 		            {
-		                case S_IFDIR:   cout << "(True)\n";     break;
-		                default:        cout << "(False)\n";    break;
+		                case S_IFDIR:   
+		                    cout << "(True)\n";     
+		                    break;
+		                default:        
+		                    cout << "(False)\n";    
+		                    goto fail_condition;
 		            }
-		            goto label2;
 		            exit(1);
 		        }
 		    }
@@ -199,14 +226,13 @@ int main()
                         if (stat(argv[1], &sb) == -1)
                         {
                             perror("stat");
-                            cout << "(False)\n";
-                            goto label2;
-                            exit(1);
+		            cout << "(False)\n";
+                            goto fail_condition;
                         }
+
                         else
                         {
                             cout << "(True)\n";
-                            goto label2;
                             exit(1);
                         }
     
@@ -216,28 +242,8 @@ int main()
 
 		else if (execvp(*argv, argv) == -1)
 	        {
-		    if (split.at(concount) == 1) 
-		    {	// skip command and go to next. && not satisfied
-			while (split.at(concount) == 0) 
-			{
-			    ++concount;
-			}
-			perror("execvp");
-			goto label;
-			exit(1);
-		    }
-		    if (split.at(concount) == 2) 
-		    {	// || connector conditions satisfied, goes to next command
-			perror("execvp");
-			goto label2;
-			exit(1);
-		    }
-		    if (split.at(concount) == 3) 
-		    {	// ;  connector, always goes to next command
-			perror("execvp");
-			goto label2;
-			exit(1);
-		    }
+	            perror("execvp");
+                    goto fail_condition;
 		}
 		
 	    }
@@ -247,44 +253,71 @@ int main()
 		if (wait(&status) == -1)
 		{
 		    perror("wait");
-		}	 
-            
-		if (split.at(concount) == 2)
-		{   // || not satisfied, skips command
-		    while (split.at(concount) == 0) 
-		    {
-			++concount;
-                    }
-                    goto label;
-		}	
-
-		if (split.at(concount) == 1) 
-		{   // && satisfied, doesn't skip command
-		    goto label2;
 		}
 
-		if (split.at(concount) == 3) 
-		{   // never skips command 
-		    goto label2;
-		}
+		goto non_fail_condition;
 
-		    goto label2;
+		fail_condition:
+		    if (split.at(concount) == 1) 
+		    {	
+		        // skip command and go to next. && not satisfied
+			while (split.at(concount) == 0) 
+			{
+			    ++concount;
+			}
+			goto label;
+			exit(1);
+		    }
+		    if (split.at(concount) == 2) 
+		    {	
+		        // || connector conditions satisfied, goes to next command
+			goto label2;
+			exit(1);
+		    }
+		    if (split.at(concount) == 3) 
+		    {	
+		        // ;  connector, always goes to next command
+			goto label2;
+			exit(1);
+		    }
+
+                non_fail_condition:
+		    if (split.at(concount) == 2)
+		    {          
+		        // || not satisfied, skips command
+		        while (split.at(concount) == 0) 
+		        {
+			    ++concount;
+                        }
+                        goto label;
+		    }	
+
+		    if (split.at(concount) == 1) 
+		    {   
+		        // && satisfied, doesn't skip command
+		        goto label2;
+		    }
+
+		    if (split.at(concount) == 3) 
+		    {   
+		        // never skips command 
+		        goto label2;
+		    }
+                    goto label2;
 
 
-		    label: // skips a command, goes to next
-		    token = strtok_r(NULL, delim, &saveptr1);
+		label: // skips a command, goes to next
+		token = strtok_r(NULL, delim, &saveptr1);
 
-		    label2:
-		    token = strtok_r(NULL, delim, &saveptr1);
+		label2:
+		token = strtok_r(NULL, delim, &saveptr1);
 
-        	    ++concount;
+        	++concount;
 	    }
 
 
 	}
         
-        if (userinput == "exit") //temporary
-            break;
 
     }
 
