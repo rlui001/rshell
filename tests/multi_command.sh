@@ -5,7 +5,7 @@
 echo "Testing operators singularly...(Press \"Enter\" to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 echo "Testing condition of OR..."
 lss || echo OR condition succeeded. 2nd cmd only executes if first cmd failed.
 echo If error shows, OR failed || echo ERROR: OR failed.
@@ -24,7 +24,7 @@ echo "!or/!and = 2nd cmd should not have run. Thus error if it does."
 echo "(Press \"Enter\" to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 echo "semi->semi"; echo "OK"; echo "OK"
 echo "!or->!or"; echo "OK" || echo "ERR" || echo "ERR"
 echo "or->or"; lss || lss || echo "OK"
@@ -44,7 +44,7 @@ EOF
 echo "Large command line test...(Press \"Enter\" to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 echo "TEST INC"; echo "OK" && echo "OK"; lss || echo "OK" && echo "OK"; echo "DONE"
 echo "TEST2 INC" && echo "OK"; lss || echo "OK" || echo "OR ERR"; echo "OK"
 exit

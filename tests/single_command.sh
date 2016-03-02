@@ -6,7 +6,7 @@
 echo "Testing command 'ls'(Press enter to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 ls
 ls -l
 ls -a
@@ -20,7 +20,7 @@ echo "============================================================"
 echo "Testing command 'date'(Press enter to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 date
 exit
 EOF
@@ -30,7 +30,7 @@ echo "============================================================"
 echo "Testing command 'echo'(Press enter to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 echo "Let's see if this works!"
 echo "If you see the first echo, then this works!"
 echo "Exiting program now, to run a different command!"
@@ -42,7 +42,7 @@ echo "============================================================="
 echo "Testing command 'mkdir'(Press enter to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 mkdir disAfolder
 echo "Let's see if the folder was created successfully..."
 ls
@@ -57,7 +57,7 @@ echo "============================================================="
 echo "Testing multiple commands in one sitting(Press enter to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 echo "Example taken from assignment specifications:"
 ls -a
 echo hello
@@ -74,7 +74,7 @@ echo "============================================================="
 echo "Testing command with many arguments:(Press enter to continue): "
 read answer
 
-./a.out << EOF
+bin/rshell << EOF
 ls -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a 
 ls -a -a -a 
 ls -a -a 
