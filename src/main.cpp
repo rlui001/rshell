@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
@@ -129,8 +130,91 @@ int main()
 			
 	    else if (pid == 0)
 	    {   
-		// currState = true;
-		if (execvp(*argv, argv) == -1)
+		if (args.at(0) == "test" || args.at(0) == "[")
+		{
+		    struct stat sb;
+
+		    if (args.at(1) == "-e")
+		    {
+                        if (stat(argv[2], &sb) == -1)
+                        {
+                            perror("stat");
+                            cout << "(False)\n";
+                            goto label2;
+                            exit(1);
+                        }
+                        else
+                        {
+                            cout << "(True)\n";
+                            goto label2;
+                            exit(1);
+                        }
+		    }
+
+		    if (args.at(1) == "-f")
+		    {
+		        if (stat(argv[2], &sb) == -1)
+		        {
+		            perror("stat");
+		            cout << "(False)\n";
+		            goto label2;
+		            exit(1);
+		        }
+		        else
+		        {
+                            switch (sb.st_mode & S_IFMT)
+                            {
+                                case S_IFREG:   cout << "(True)\n";     break;
+                                default:        cout << "(False)\n";    break;
+                            }
+                            goto label2;
+                            exit(1);
+		        }
+		    }
+
+		    if (args.at(1) == "-d")
+		    {
+                        if (stat(argv[2], &sb) == -1)
+		        {
+		            perror("stat");
+		            cout << "(False)\n";
+		            goto label2;
+		            exit(1);
+		        }
+		        else
+		        {
+		            switch (sb.st_mode & S_IFMT)
+		            {
+		                case S_IFDIR:   cout << "(True)\n";     break;
+		                default:        cout << "(False)\n";    break;
+		            }
+		            goto label2;
+		            exit(1);
+		        }
+		    }
+		    
+                    
+                    else
+                    {
+                        if (stat(argv[1], &sb) == -1)
+                        {
+                            perror("stat");
+                            cout << "(False)\n";
+                            goto label2;
+                            exit(1);
+                        }
+                        else
+                        {
+                            cout << "(True)\n";
+                            goto label2;
+                            exit(1);
+                        }
+    
+                    }
+                }
+
+
+		else if (execvp(*argv, argv) == -1)
 	        {
 		    if (split.at(concount) == 1) 
 		    {	// skip command and go to next. && not satisfied
@@ -155,6 +239,7 @@ int main()
 			exit(1);
 		    }
 		}
+		
 	    }
 
 	    else
@@ -186,7 +271,7 @@ int main()
 		    goto label2;
 
 
-		    label:                                          // skips a command, goes to next
+		    label: // skips a command, goes to next
 		    token = strtok_r(NULL, delim, &saveptr1);
 
 		    label2:
