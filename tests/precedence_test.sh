@@ -44,6 +44,19 @@ echo 31. complete || (echo ERR) || echo ERR
 echo 32. good || (lss || echo ERR) && echo complete
 lss || (echo 33. OK) && echo complete
 lss || (echo 33. OK || echo ERR) || echo ERR
+
+echo "Testing precedence within precedence"
+((echo 34. OK || echo ERR) || echo ERR)
+((lss && ls) || echo 35. complete)
+((echo 36. OK || echo ERR) && echo OK)
+((lss || ls) && echo 37. complete)
+
+echo "Remaining tests"
+(echo 38. OK);(echo complete)
+(echo 39. OK || echo ERR);(echo complete)
+(echo 40. OK && echo good);(echo complete)
+(lss || ls);(echo 41. complete)
+
 exit
 EOF
 
