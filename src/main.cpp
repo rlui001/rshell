@@ -49,7 +49,7 @@ int main()
     char *contoken;
     char *savetok;
     vector<int> split;
-    int counter = 0;
+    //int counter = 0;
     int concount = 0;
 
     char *tempstr = new char[userinput.size() + 1];
@@ -76,12 +76,14 @@ int main()
         }
         else 
         {
-            split.push_back(0);
+            //split.push_back(0);
             contoken = strtok_r(NULL, lim, &savetok);
         }
     }
 
     split.push_back(-1); // -1 indicates end of line
+
+    cout << "SIZE OF SPLIT VECTOR: " << split.size() << endl;
 
     char delim[] = ";|&";
     char *token, *subtoken;
@@ -106,7 +108,19 @@ int main()
         //cout << "Subtoken: " << subtoken << endl;
         subtoken = strtok_r(NULL, space, &saveptr2);
         }
-        // POSSIBLE FIX HERE
+        cout << "ARGS SIZE: " << args.size() << endl;
+
+        cout << "TEST: " << endl;
+
+        for (unsigned int i = 0; i < split.size(); ++i) {
+            cout << split.at(i) << ' ';
+        }
+        cout << endl;
+        for (unsigned int i = 0; i < args.size(); ++i) {
+            cout << args.at(i) << ' ';
+        }
+        cout << endl;
+
         char **argv = new char*[args.size() + 1];
         for (unsigned int i = 0; i < args.size(); ++i)
         {
@@ -114,31 +128,30 @@ int main()
                 {
                     exit(1);
                 }
-                if (split.at(concount) == 2)
-                {   
+                //if (split.at(concount) == 2)
+                //{   
             
                 // || not satisfied, skips command
-                    while (split.at(concount) == 0) 
-                    {
-                        ++concount;
-                    }
-                    strtok_r(NULL, delim, &saveptr1);
-                }
+                   // while (split.at(concount) == 0) 
+                   // {
+                   //     ++concount;
+                   // }
+                   // strtok_r(NULL, delim, &saveptr1);
+                //}
 
-                else if (split.at(concount) == 1) 
-                {   
+                //else if (split.at(concount) == 1) 
+                //{   
                     // && satisfied, doesn't skip command
-                    strtok_r(NULL, delim, &saveptr1);
-                }
+                //    strtok_r(NULL, delim, &saveptr1);
+                //}
 
 
                 //counter = args.size(); 
                 argv[i] = new char[args.at(i).size() + 1];
                 strcpy(argv[i], args.at(i).c_str());	
         }
-        
         argv[args.size()] = '\0';
-        concount = concount + counter;
+        //concount = concount + counter;
         
         // Execution of command line using fork calls.
         int pid = fork();
@@ -260,36 +273,53 @@ int main()
         fail_condition:
             if (split.at(concount) == 1) 
             {	
-                // skip command and go to next. && not satisfied
-                while (split.at(concount) == 0) 
-                {
+                // skip command and go to next. && not satisfied   
+                // fewfw && ls && ls && ls || ls
+                //       1      1    1     2
+                //                         
+                //output should be: (error) ... contents of ls command once
+                while (split.at(concount) == 1) {
+                    token = strtok_r(NULL, delim, &saveptr1);
                     ++concount;
                 }
+                goto label2;
+
             goto label;
             exit(1);
             }
-            if (split.at(concount) == 2) 
+            else if (split.at(concount) == 2) 
             {	
                 // || connector conditions satisfied, goes to next command
                 goto label2;
                 exit(1);
             }
-            if (split.at(concount) == 3) 
+            else if (split.at(concount) == 3) 
             {	
             // ;  connector, always goes to next command
             goto label2;
             exit(1);
             }
+            else {
+                cout << "ERROR HERE!" << endl;
+            }
+
 
         non_fail_condition:
             if (split.at(concount) == 2)
             {          
                 // || not satisfied, skips command
-                while (split.at(concount) == 0) 
-                {
+                // ls || ls || ls || ls && ls || ls
+                //    2     2     2     1     2
+                //    ^
+                //    ls, ls
+                
+
+                while (split.at(concount) == 2) {
+                    token = strtok_r(NULL, delim, &saveptr1);
                     ++concount;
                 }
-                goto label;
+
+                goto label2;
             }
 
             if (split.at(concount) == 1) 
