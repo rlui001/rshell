@@ -400,10 +400,11 @@ int main()
                         goto label2;
                     }
                     else {      // no '(' following, which means it is within a set of parentheses, and will skip until correct connector OR ')'
-                        while (split.at(concount) != 5 && split.at(concount) == 1) {
+                        while (split.at(concount) == 5 || split.at(concount) == 1) {
                             token = strtok_r(NULL, delim, &saveptr1);
                             ++concount;
                         }
+
                         --pcounter;
                         goto label2;
                     }
@@ -415,6 +416,10 @@ int main()
                         token = strtok_r(NULL, delim, &saveptr1);
                         ++concount;
                     }
+                    while (split.at(concount) == 1) {
+                        token = strtok_r(NULL, delim, &saveptr1);
+                        ++concount;
+                    }
                     goto label2;
                 }
 
@@ -423,6 +428,8 @@ int main()
                     ++concount;
                 }
                 goto label2;
+
+
 
             goto label;
             exit(1);
@@ -454,7 +461,7 @@ int main()
                         goto label2;
                     }
                     else {
-                        while (split.at(concount) != 5 && split.at(concount) == 2) {
+                        while (split.at(concount) == 2 || split.at(concount) == 5) {
                             token = strtok_r(NULL, delim, &saveptr1);
                             ++concount;
                         }
@@ -466,6 +473,10 @@ int main()
                 if (split.at(concount+1) == 4) {
                     ++concount;
                     while (split.at(concount) != 5) {
+                        token = strtok_r(NULL, delim, &saveptr1);
+                        ++concount;
+                    }
+                    while (split.at(concount) == 2) {
                         token = strtok_r(NULL, delim, &saveptr1);
                         ++concount;
                     }

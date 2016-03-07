@@ -11,10 +11,10 @@ bin/rshell <<EOF
 (echo 4. complete) || (echo ERR)
 (echo 5. OK; echo complete) || (echo ERR)
 (echo 6. OK && echo complete) || (echo ERR)
-(echo 7. OK || echo complete) || (echo ERR)
+(echo 7. OK || echo ERR) || (echo ERR)
 (lss) || (echo 8. complete)
-(lss && ls) || (echo 9. ERR)
-(lss || ls) || (echo 10. ERR)
+(lss && ls) || (echo 9. complete)
+(lss || ls) || (echo 10. complete)
 (lss; ls) || (echo 11. ERR)
 
 (echo 12. OK) && (echo complete)
